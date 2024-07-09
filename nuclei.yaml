@@ -1,0 +1,29 @@
+id: waf_template
+
+info:
+  name: First template
+  author: kovachVL
+  severity: high
+  description: Testing WAF detection with XSS payload
+  reference: https://bi.zone/
+  tags: first,cve,learn,nuclei
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    payloads:
+      xss_payload:
+        - "<script>alert('XSS');</script>"
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    matchers:
+      - type: word
+        words:
+          - "XSS"
+        condition: contains
+      - type: status
+        status:
+          - 403
+          - 406
+          - 501
